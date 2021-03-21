@@ -18,13 +18,17 @@
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);   
     
-    function arrayFindKey(string $str, array $array) {
+    function arrayFindKey(string $str, array $array):int {
         $expr = '/' . $str . '/';
         foreach ($array as $key => $value) {
           if (preg_match($expr, $value)) {
             return $key;
           }
         }
+    }
+
+    function convertDatetime(string $str, int $a, $b = null) :int{
+        return intval(substr($str, $a, $b));
     }
     
     try {
@@ -39,7 +43,7 @@
             // echo "$id => $name \n";
         };
 
-        $sql = 'INSERT INTO Rainfalls(date, time, rainfall, districtsID) VALUES(:date, :time, :rainfall, :districtsID)';
+        $sql = 'INSERT INTO Rainfalls(year, month, day, time, rainfall, districtsID) VALUES(:year, :month, :day, :time, :rainfall, :districtsID)';
         $stmt = $pdo->prepare($sql);
 
         foreach (glob("./rainfallData/*.json") as $filepath) {
@@ -55,10 +59,12 @@
             echo "Loading $districtname\n";
  
             foreach($filecontentArr as $datetime => $rainfall){
-                $date = substr($datetime,0,10);
+                $year = convertDatetime($datetime,0,4);
+                $month = convertDatetime($datetime,5,2);
+                $day = convertDatetime($datetime,8,2);
                 $time = substr($datetime,-8);
 
-                $stmt->execute(['date' => $date, 'time' => $time, 'rainfall' => $rainfall, 'districtsID' => $districtID]);
+                $stmt->execute(['year' => $year,'month' => $month,'day' => $day, 'time' => $time, 'rainfall' => $rainfall, 'districtsID' => $districtID]);
                 
                 $loading++;
                 $loadingProgress = $loading / $filelength;        
