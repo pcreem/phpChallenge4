@@ -18,8 +18,8 @@
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);   
     
-    function arrayFindKey(string $str, array $array):int {
-        $expr = '/' . $str . '/';
+    function arrayFindKey(string $district, array $array):int {
+        $expr = '/' . $district . '/';
         foreach ($array as $key => $value) {
           if (preg_match($expr, $value)) {
             return $key;
@@ -27,8 +27,8 @@
         }
     }
 
-    function convertDatetime(string $str, int $a, $b = null) :int{
-        return intval(substr($str, $a, $b));
+    function convertDatetime(string $date, int $a, $b = null) :int{
+        return intval(substr($date, $a, $b));
     }
     
     try {
