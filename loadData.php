@@ -39,7 +39,7 @@
             // echo "$id => $name \n";
         };
 
-        $sql = 'INSERT INTO Rainfalls(datetime, rainfall, districtsID) VALUES(:datetime, :rainfall, :districtsID)';
+        $sql = 'INSERT INTO Rainfalls(date, time, rainfall, districtsID) VALUES(:date, :time, :rainfall, :districtsID)';
         $stmt = $pdo->prepare($sql);
 
         foreach (glob("./rainfallData/*.json") as $filepath) {
@@ -55,7 +55,10 @@
             echo "Loading $districtname\n";
  
             foreach($filecontentArr as $datetime => $rainfall){
-                $stmt->execute(['datetime' => $datetime, 'rainfall' => $rainfall, 'districtsID' => $districtID]);
+                $date = substr($datetime,0,10);
+                $time = substr($datetime,-8);
+
+                $stmt->execute(['date' => $date, 'time' => $time, 'rainfall' => $rainfall, 'districtsID' => $districtID]);
                 
                 $loading++;
                 $loadingProgress = $loading / $filelength;        
