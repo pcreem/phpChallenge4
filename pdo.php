@@ -22,10 +22,10 @@
         $sql = 'INSERT INTO Districts VALUES(:id, :name)';
         $stmt = $pdo->prepare($sql);
 
-        foreach(BASE_DISTRICTS as $id=>$name){
-            $stmt->execute(['id' => $id, 'name' => $name]);
-            echo "$id => $name \n";
-        };
+        // foreach(BASE_DISTRICTS as $id=>$name){
+        //     $stmt->execute(['id' => $id, 'name' => $name]);
+        //     echo "$id => $name \n";
+        // };
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
     }
