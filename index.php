@@ -2,11 +2,10 @@
 declare(strict_types=1);
 require_once __DIR__.'/vendor/autoload.php';
 
-// use App\Controller\DatabaseController;
+use App\Controller\DatabaseController;
 use App\Core\Database\DB;
 use Dotenv\Dotenv;
 
-//預設使用 dotenv
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -24,5 +23,5 @@ $pdo = DB::init()->pdo($dsn, $user, $password);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-// $pdo->query('INSERT INTO Districts VALUES(23, "test")');
+$databaseController = new DatabaseController($pdo);
 
