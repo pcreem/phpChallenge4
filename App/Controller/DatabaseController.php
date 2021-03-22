@@ -4,19 +4,17 @@ namespace App\Controller;
 
 use App\Core\Database\RainfallSchema;
 use App\Core\Database\CollectData;
+use PDO;
 
 class DatabaseController implements RainfallSchema, CollectData
 {
     public $pdo;
-    public function showDistricts(): array { return []; }
-    public function sumByYear($district = null): array{ return []; }
-    public function sumByMonth($district = null): array{ return []; }
 
     public function __construct($pdo){
         $this->pdo = $pdo;
-        $this->createDistrictsTable();
-        $this->createRainfallsTable();
-        $this->importData();
+        // $this->createDistrictsTable();
+        // $this->createRainfallsTable();
+        // $this->importData();
     }
 
     public function createDistrictsTable(){
@@ -101,5 +99,69 @@ class DatabaseController implements RainfallSchema, CollectData
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), (int)$e->getCode());
         }
+    }
+
+    public function showDistricts(): array { return CollectData::BASE_DISTRICTS; }
+
+    public function sumByYear($district = null): array{ 
+        if ($district){
+            try{
+                $district = (int)$district;
+                $sql='SELECT year, SUM(rainfall) as Rainfall FROM TRainfalls WHERE districtsID = :districtsID GROUP BY year ORDER BY year ASC';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(['districtsID' => $district]);
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;                
+            }
+            catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
+        }
+        else{
+            try{
+                
+                $sql='SELECT year, SUM(rainfall) as Rainfall FROM TRainfalls GROUP BY year ORDER BY year ASC';
+                $stmt = $this->pdo->query($sql);
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;                
+            }
+            catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
+        }
+  
+    }
+
+    public function sumByMonth($district = null): array{ 
+        if ($district){
+            try{
+                $district = (int)$district;
+                $sql='SELECT month, SUM(rainfall) as Rainfall FROM TRainfalls WHERE districtsID = :districtsID GROUP BY month ORDER BY month ASC';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute(['districtsID' => $district]);
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;                
+            }
+            catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
+        }
+        else{
+            try{
+                
+                $sql='SELECT month, SUM(rainfall) as Rainfall FROM TRainfalls GROUP BY month ORDER BY month ASC';
+                $stmt = $this->pdo->query($sql);
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                return $result;                
+            }
+            catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
+        }
+  
     }
 }

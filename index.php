@@ -25,3 +25,10 @@ $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 $databaseController = new DatabaseController($pdo);
 
+$withDistrictYear = $databaseController->sumByYear(11);
+$totalYear = $databaseController->sumByYear();
+
+$withDistrictMonth = $databaseController->sumByMonth(11);
+$totalMonth = $databaseController->sumByMonth();
+
+var_export($totalMonth);
