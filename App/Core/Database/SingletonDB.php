@@ -3,9 +3,8 @@
 
 namespace App\Core\Database;
 
-
 use PDO;
-
+ 
 abstract class SingletonDB
 {
     private static $instance = null;
@@ -20,5 +19,5 @@ abstract class SingletonDB
         return self::$instance;
     }
 
-    abstract function pdo(): PDO;
+    abstract function pdo(string $dsn, string $user, string $password): PDO;
 }
