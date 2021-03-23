@@ -19,7 +19,7 @@ class DatabaseController implements RainfallSchema, CollectData
 
     public function createDistrictsTable(){
         $this->pdo->query('
-        CREATE TABLE TDistricts
+        CREATE TABLE Districts
         (
             id int,
             name varchar(255)
@@ -28,7 +28,7 @@ class DatabaseController implements RainfallSchema, CollectData
 
     public function createRainfallsTable(){
         $this->pdo->query('
-        CREATE TABLE TRainfalls (
+        CREATE TABLE Rainfalls (
             id int NOT NULL AUTO_INCREMENT,
             year int NOT NULL,
             month int NOT NULL,
@@ -56,10 +56,10 @@ class DatabaseController implements RainfallSchema, CollectData
         }
         
         try {
-            $this->pdo->query('TRUNCATE TABLE TDistricts');
-            $this->pdo->query('TRUNCATE TABLE TRainfalls');
+            $this->pdo->query('TRUNCATE TABLE Districts');
+            $this->pdo->query('TRUNCATE TABLE Rainfalls');
     
-            $sql = 'INSERT INTO TDistricts VALUES(:id, :name)';
+            $sql = 'INSERT INTO Districts VALUES(:id, :name)';
             $stmt = $this->pdo->prepare($sql);
     
             foreach(CollectData::BASE_DISTRICTS as $id=>$name){
@@ -67,7 +67,7 @@ class DatabaseController implements RainfallSchema, CollectData
                 // echo "$id => $name \n";
             };
     
-            $sql = 'INSERT INTO TRainfalls(year, month, day, time, rainfall, districtsID) VALUES(:year, :month, :day, :time, :rainfall, :districtsID)';
+            $sql = 'INSERT INTO Rainfalls(year, month, day, time, rainfall, districtsID) VALUES(:year, :month, :day, :time, :rainfall, :districtsID)';
             $stmt = $this->pdo->prepare($sql);
     
             foreach (glob("./rainfallData/*.json") as $filepath) {
@@ -109,8 +109,8 @@ class DatabaseController implements RainfallSchema, CollectData
                 $district = (int)$district;
                 $sql='
                     SELECT D.id, D.name, R.year as Year, SUM(R.rainfall) as Rainfall                     
-                    FROM TDistricts D                      
-                    INNER JOIN TRainfalls R                      
+                    FROM Districts D                      
+                    INNER JOIN Rainfalls R                      
                     ON D.id = R.districtsID 
                     WHERE R.districtsID = :districtsID 
                     GROUP BY D.id, D.name, R.year                     
@@ -131,8 +131,8 @@ class DatabaseController implements RainfallSchema, CollectData
                 
                 $sql='
                     SELECT D.id, D.name, R.year as Year, SUM(R.rainfall) as Rainfall
-                    FROM TDistricts D 
-                    INNER JOIN TRainfalls R 
+                    FROM Districts D 
+                    INNER JOIN Rainfalls R 
                     ON D.id = R.districtsID
                     GROUP BY D.id, D.name, R.year
                     ORDER BY D.id ASC
@@ -155,8 +155,8 @@ class DatabaseController implements RainfallSchema, CollectData
                 $district = (int)$district;
                 $sql='
                     SELECT D.id, D.name, R.month as Month, SUM(R.rainfall) as Rainfall                     
-                    FROM TDistricts D                      
-                    INNER JOIN TRainfalls R                      
+                    FROM Districts D                      
+                    INNER JOIN Rainfalls R                      
                     ON D.id = R.districtsID 
                     WHERE R.districtsID = :districtsID 
                     GROUP BY D.id, D.name, R.month                     
@@ -177,8 +177,8 @@ class DatabaseController implements RainfallSchema, CollectData
                 
                 $sql='
                     SELECT D.id, D.name, R.month as Month, SUM(R.rainfall) as Rainfall
-                    FROM TDistricts D 
-                    INNER JOIN TRainfalls R 
+                    FROM Districts D 
+                    INNER JOIN Rainfalls R 
                     ON D.id = R.districtsID
                     GROUP BY D.id, D.name, R.month
                     ORDER BY D.id ASC
