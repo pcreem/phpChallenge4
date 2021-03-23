@@ -107,7 +107,15 @@ class DatabaseController implements RainfallSchema, CollectData
         if ($district){
             try{
                 $district = (int)$district;
-                $sql='SELECT year, SUM(rainfall) as Rainfall FROM TRainfalls WHERE districtsID = :districtsID GROUP BY year ORDER BY year ASC';
+                $sql='
+                    SELECT D.id, D.name, R.year as Year, SUM(R.rainfall) as Rainfall                     
+                    FROM TDistricts D                      
+                    INNER JOIN TRainfalls R                      
+                    ON D.id = R.districtsID 
+                    WHERE R.districtsID = :districtsID 
+                    GROUP BY D.id, D.name, R.year                     
+                    ORDER BY D.id ASC                
+                ';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute(['districtsID' => $district]);
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -121,7 +129,14 @@ class DatabaseController implements RainfallSchema, CollectData
         else{
             try{
                 
-                $sql='SELECT year, SUM(rainfall) as Rainfall FROM TRainfalls GROUP BY year ORDER BY year ASC';
+                $sql='
+                    SELECT D.id, D.name, R.year as Year, SUM(R.rainfall) as Rainfall
+                    FROM TDistricts D 
+                    INNER JOIN TRainfalls R 
+                    ON D.id = R.districtsID
+                    GROUP BY D.id, D.name, R.year
+                    ORDER BY D.id ASC
+                ';
                 $stmt = $this->pdo->query($sql);
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -138,7 +153,15 @@ class DatabaseController implements RainfallSchema, CollectData
         if ($district){
             try{
                 $district = (int)$district;
-                $sql='SELECT month, SUM(rainfall) as Rainfall FROM TRainfalls WHERE districtsID = :districtsID GROUP BY month ORDER BY month ASC';
+                $sql='
+                    SELECT D.id, D.name, R.month as Month, SUM(R.rainfall) as Rainfall                     
+                    FROM TDistricts D                      
+                    INNER JOIN TRainfalls R                      
+                    ON D.id = R.districtsID 
+                    WHERE R.districtsID = :districtsID 
+                    GROUP BY D.id, D.name, R.month                     
+                    ORDER BY D.id ASC                
+                ';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute(['districtsID' => $district]);
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -152,7 +175,14 @@ class DatabaseController implements RainfallSchema, CollectData
         else{
             try{
                 
-                $sql='SELECT month, SUM(rainfall) as Rainfall FROM TRainfalls GROUP BY month ORDER BY month ASC';
+                $sql='
+                    SELECT D.id, D.name, R.month as Month, SUM(R.rainfall) as Rainfall
+                    FROM TDistricts D 
+                    INNER JOIN TRainfalls R 
+                    ON D.id = R.districtsID
+                    GROUP BY D.id, D.name, R.month
+                    ORDER BY D.id ASC
+                ';
                 $stmt = $this->pdo->query($sql);
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

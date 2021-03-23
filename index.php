@@ -25,6 +25,8 @@ $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 $databaseController = new DatabaseController($pdo);
 
+//modify the following code to show district name by inner join query
+//check the original logic flow again
 $withDistrictYear = $databaseController->sumByYear(11);
 $totalYear = $databaseController->sumByYear();
 
