@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__.'/vendor/autoload.php';
 
 use App\Controller\DatabaseController;
-use App\Core\Database\DB;
+use App\Core\Database\ConnectDB;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -19,7 +19,7 @@ $charset = 'utf8mb4';
 $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset;port=$port";
 $filepath = $_ENV['FILE_PATH'];
 
-$pdo = DB::init()->pdo($dsn, $user, $password);
+$pdo = ConnectDB::getInstance($host, $user, $password, $dbname)->getConnection();
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
