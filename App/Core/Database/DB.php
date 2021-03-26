@@ -17,7 +17,16 @@ class DB extends SingletonDB {
   private $user = '' ;
   private $password = '';
 
-  public function __construct(){}
+  public function __construct(){
+    $this->host = $_ENV['DB_HOST'];
+    $this->user = $_ENV['DB_USERNAME'];
+    $this->password = $_ENV['DB_PASSWORD']; 
+    $this->dbname = $_ENV['DB_DATABASE'];
+
+    $this->conn = new PDO("mysql:host={$this->host};
+    dbname={$this->dbname}", $this->user,$this->password,
+    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+  }
   
   public static function init()
   {
@@ -30,17 +39,6 @@ class DB extends SingletonDB {
   
   public function pdo(): PDO
   {
-    $this->host = $_ENV['DB_HOST'];
-    $this->user = $_ENV['DB_USERNAME'];
-    $this->password = $_ENV['DB_PASSWORD']; 
-    $this->dbname = $_ENV['DB_DATABASE'];
-
-    $this->conn = new PDO("mysql:host={$this->host};
-    dbname={$this->dbname}", $this->user,$this->password,
-    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-
     return $this->conn;
   }
 }
-
-  
