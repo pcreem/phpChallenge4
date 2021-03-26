@@ -3,9 +3,9 @@ declare(strict_types=1);
 require_once __DIR__.'/vendor/autoload.php';
 
 use App\Controller\DatabaseController;
-use App\Core\Database\ConnectDB;
+use App\Core\Database\DB;
 
-$pdo = ConnectDB::getInstance()->getConnection();
+$pdo = DB::init()->pdo();
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 

@@ -1,33 +1,46 @@
 <?php
 namespace App\Core\Database;
-
+$dir = __DIR__.'/../../../';
+require_once $dir.'/vendor/autoload.php';
+use Dotenv\Dotenv;
 use PDO;
 
-class DB extends SingletonDB
-{
-    // Hold the class instance.
-    private static $instance = null;
-    private $conn;
-    
-    // The db connection is established in the private constructor.
-    private function __construct($host, $user, $pass, $name)
-    {
-      $this->conn = new PDO("mysql:host={$host};
-      dbname={$name}", $user,$pass,
-      array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-    }
-    
-    public static function init()
-    {
-      if(!self::$instance)
-      {
-        self::$instance = new DB;
-      }
-     
-      return self::$instance;
-    }
+$dotenv = Dotenv::createImmutable($dir);
+$dotenv->load();
 
-    public function pdo(): PDO{
-        return $this->conn;
-    }        
+class DB extends SingletonDB {
+  private static $instance = null;
+  private $conn; 
+
+  private $host = '';
+  private $dbname = '';
+  private $user = '' ;
+  private $password = '';
+
+  public function __construct(){}
+  
+  public static function init()
+  {
+    if(!self::$instance)
+    {
+      self::$instance = new DB();
+    }
+    return self::$instance;
+  }
+  
+  public function pdo(): PDO
+  {
+    $this->host = $_ENV['DB_HOST'];
+    $this->user = $_ENV['DB_USERNAME'];
+    $this->password = $_ENV['DB_PASSWORD']; 
+    $this->dbname = $_ENV['DB_DATABASE'];
+
+    $this->conn = new PDO("mysql:host={$this->host};
+    dbname={$this->dbname}", $this->user,$this->password,
+    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+
+    return $this->conn;
+  }
 }
+
+  

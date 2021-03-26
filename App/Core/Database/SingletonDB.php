@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Core\Database;
+
 
 use PDO;
 
@@ -8,8 +10,8 @@ abstract class SingletonDB
 {
     private static $instance = null;
 
-    private  function __construct(){}
-    
+    abstract  function __construct();
+
     public static function init()
     {
         if (!self::$instance) {
