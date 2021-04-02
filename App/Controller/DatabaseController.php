@@ -12,13 +12,13 @@ class DatabaseController implements RainfallSchema, CollectData
 
     public function __construct($pdo){
         $this->pdo = $pdo;
-        // $this->createDistrictsTable();
-        // $this->createRainfallsTable();
+        $this->createDistrictsTable();
+        $this->createRainfallsTable();
     }
 
     public function createDistrictsTable(){
         $this->pdo->query('
-        CREATE TABLE Districts
+        CREATE TABLE IF NOT EXISTS Districts
         (
             id int,
             name varchar(255)
@@ -27,7 +27,7 @@ class DatabaseController implements RainfallSchema, CollectData
 
     public function createRainfallsTable(){
         $this->pdo->query('
-        CREATE TABLE Rainfalls (
+        CREATE TABLE IF NOT EXISTS Rainfalls (
             id int NOT NULL AUTO_INCREMENT,
             year int NOT NULL,
             month int NOT NULL,
